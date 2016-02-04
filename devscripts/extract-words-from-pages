@@ -1,0 +1,22 @@
+#!/usr/bin/env perl
+
+use 5.010;
+#use open qw(:std :utf8);
+use strict;
+use warnings;
+
+use File::Slurper qw(read_text);
+
+my @w;
+my %mem;
+
+binmode STDOUT, ":utf8";
+
+for my $file (<../devdata/?>) {
+    my $ct = read_text $file;
+    while ($ct =~ m!^<li><a href=[^>]+>([^<]+)</a>!gm) {
+        push @w, $1 unless $mem{$1}++;
+    }
+}
+
+say for sort @w;
